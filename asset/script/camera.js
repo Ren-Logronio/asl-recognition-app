@@ -1,36 +1,25 @@
-let activeCamera = 'user';
+function getStream() {
+  if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+    return navigator.mediaDevices.enumerateDevices()
+      .then(function(devices) {
+        var rearCamera = devices.find(function(device) {
+          return device.kind === 'videoinput' && device.facingMode === 'environment';
+        });
 
-// Function to toggle between the front and rear cameras
-function toggleCamera() {
-  const constraints = { video: true };
+        var constraints = { video: true };
+        if (rearCamera) {
+          constraints.video = { deviceId: rearCamera.deviceId };
+        }
 
-  if (activeCamera === 'user') {
-    constraints.video = { facingMode: 'environment' };
-    activeCamera = 'environment';
+        return navigator.mediaDevices.getUserMedia(constraints);
+      });
   } else {
-    constraints.video = { facingMode: 'user' };
-    activeCamera = 'user';
+    console.log('getUserMedia is not supported');
+    return Promise.reject(new Error('getUserMedia is not supported'));
   }
-
-  // Stop the current video stream
-  video.srcObject.getTracks().forEach(track => track.stop());
-
-  // Get the new video stream with the updated constraints
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then(function(stream) {
-      video.srcObject = stream;
-      video.play();
-
-      // Create an ImageCapture object from the new video stream
-      var track = stream.getVideoTracks()[0];
-      imageCapture = new ImageCapture(track);
-    })
-    .catch(function(error) {
-      console.log('Error accessing camera: ', error);
-    });
 }
 
-navigator.mediaDevices.getUserMedia({ video: true })
+getStream()
   .then(function(stream) {
     var video = document.createElement('video');
     video.srcObject = stream;
@@ -54,7 +43,7 @@ navigator.mediaDevices.getUserMedia({ video: true })
           });
 
         // Schedule the next frame
-        setTimeout(drawFrame, 0);
+        requestAnimationFrame(drawFrame);
       }
 
       drawFrame();
@@ -65,15 +54,10 @@ navigator.mediaDevices.getUserMedia({ video: true })
       .catch(function(error) {
         console.log('Error playing video: ', error);
       });
-
-    // Add a button or trigger to swap the camera
-    var swapCameraButton = document.getElementById('swapCameraButton');
-    swapCameraButton.addEventListener('click', toggleCamera);
   })
   .catch(function(error) {
     console.log('Error accessing webcam: ', error);
   });
-
 
 
     function checkVideoInput() {
