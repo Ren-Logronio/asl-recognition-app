@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ASL Recognition App - Scanning</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./lib/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./asset/style/style.css">
+    </head>
+    <body class="bg-black vh-100">
+        
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="container-fluid bg-dark vh-100 p-0 m-0 me-0 z-index-10">
+            <div class="h-100 d-flex flex-column justify-content-between position-relative z-index-10">
+                <div class="w-100 pt-3 ps-1 pe-1 pb-5 bg-gradient-fade-navyblue d-flex align-content-center justify-content-between z-index-10">
+                    <a class="text-light pb-2 pt-2 mt-2 ms-3 ms-lg-5 ms-xl-5 ms-xxl-5 mb-2 z-index-10" href="index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                    </a>
+                    <a class="text-light pb-2 pt-2 mt-2 me-3 me-lg-5 me-xl-5 me-xxl-5 mb-2 z-index-10" 
+                    onclick="toggleCamera()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="w-100 mt-auto d-flex flex-row
+                 justify-content-between text-light 
+                 bg-gradient-fade-navyblue-0deg
+                 z-index-10">
+                    <div class="h-200px w-100 border border-1 border-light border-radius m-2
+                        ms-3 ms-lg-5 ms-xl-5 ms-xxl-5
+                        z-index-10">
+                    </div>
+                    <div class="d-flex flex-column justify-content-evenly align-content-center ps-1 pe-1 
+                        me-3 me-lg-5 me-xl-5 me-xxl-5
+                        ms-2 ms-lg-4 ms-xl-4 ms-xxl-4
+                        z-index-10">
+                        <a class="link link-light"
+                            onclick="backspace()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
+                                <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
+                                <path d="M13.683 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1h7.08zm-7.08 1a1 1 0 0 0-.76.35L1 8l4.844 5.65a1 1 0 0 0 .759.35h7.08a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1h-7.08z"/>
+                            </svg>
+                        </a>
+                        <a class="link link-light"
+                            onclick="enter()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="camLoading" class="content-absolute-center">
+                <div class="loading text-light-50 d-flex flex-column justify-content-center align-content-center">
+                    <span class="d-flex justify-content-center">
+                        <div class="spinner-border width-and-height-5rem weight-70" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </span>
+                    <div class="d-flex flex-column justify-content-center align-content-center mt-3">
+                        <span class="text-center">Loading the Camera..</span>
+                    </div>
+                </div>
+            </div>
+            <div class="image-capture video-background"></div>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" 
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" 
+            crossorigin="anonymous"></script>
+        <script src="./lib/bootstrap-5.0.2-dist/js/bootstrap.min.js" async defer></script>
+        <script src="./lib/web-camera-library-main/webCamLib.min.js"></script>
+        <script type="text/javascript" defer>
+            let globalCamera;
+            globalCamera = $('.image-capture').customWebCam();
+        </script>
+    </body>
+</html>
