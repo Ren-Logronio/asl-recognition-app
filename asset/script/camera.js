@@ -1,3 +1,35 @@
+let activeCamera = 'user';
+
+// Function to toggle between the front and rear cameras
+function toggleCamera() {
+  const constraints = { video: true };
+
+  if (activeCamera === 'user') {
+    constraints.video = { facingMode: 'environment' };
+    activeCamera = 'environment';
+  } else {
+    constraints.video = { facingMode: 'user' };
+    activeCamera = 'user';
+  }
+
+  // Stop the current video stream
+  video.srcObject.getTracks().forEach(track => track.stop());
+
+  // Get the new video stream with the updated constraints
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then(function(stream) {
+      video.srcObject = stream;
+      video.play();
+
+      // Create an ImageCapture object from the new video stream
+      var track = stream.getVideoTracks()[0];
+      imageCapture = new ImageCapture(track);
+    })
+    .catch(function(error) {
+      console.log('Error accessing camera: ', error);
+    });
+}
+
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(function(stream) {
     var video = document.createElement('video');
@@ -33,12 +65,16 @@ navigator.mediaDevices.getUserMedia({ video: true })
       .catch(function(error) {
         console.log('Error playing video: ', error);
       });
+
+    // Add a button or trigger to swap the camera
+    var swapCameraButton = document.getElementById('swapCameraButton');
+    swapCameraButton.addEventListener('click', toggleCamera);
   })
   .catch(function(error) {
     console.log('Error accessing webcam: ', error);
   });
 
-  
+
 
     function checkVideoInput() {
         return new Promise(function(resolve, reject) {
