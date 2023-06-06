@@ -34,9 +34,10 @@ getStream()
       function drawFrame() {
         imageCapture.grabFrame()
           .then(function(imageBitmap) {
-            canvas.width = imageBitmap.width;
-            canvas.height = imageBitmap.height;
-            context.drawImage(imageBitmap, 0, 0);
+              let screen_ratio = imageBitmap.width / imageBitmap.height;
+              canvas.width = window.height;
+              canvas.height = window.width * screen_ratio;
+              context.drawImage(imageBitmap, 0, 0);
           })
           .catch(function(error) {
             console.log('Error grabbing frame: ', error);
