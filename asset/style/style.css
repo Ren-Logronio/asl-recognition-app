@@ -161,3 +161,29 @@
 .border-radius{
     border-radius: 0.25rem;
 }
+
+.camera-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.left-0 {
+    left: 0;
+}
+
+.right-0 {
+    right: 0;
+}
+
+.left-10{
+    left: 10%;
+}
+
+.right-10{
+    right: 10%;
+}
+
+.z-20{
+    z-index: 20;
+}

@@ -10,7 +10,10 @@
         <title>ASL Recognition App - Scanning</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./lib/bootstrap-5.0.2-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./asset/style/style.css">
+        <link rel="stylesheet" type="text/css" href="./asset/style/style.css">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+        <meta http-equiv="Pragma" content="no-cache"/>
+        <meta http-equiv="Expires" content="0"/>
     </head>
     <body class="bg-black vh-100">
         
@@ -18,6 +21,10 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <div class="container-fluid bg-dark vh-100 p-0 m-0 me-0 z-index-10">
+            <div class="debug position-absolute left-10 right-10 text-light z-20">
+                <div class="debug-title">Debug</div>
+                <div class="debug-content">Prediction: <span id="prediction">None</span></div>
+            </div>
             <div class="h-100 d-flex flex-column justify-content-between position-relative z-index-10">
                 <div class="w-100 pt-3 ps-1 pe-1 pb-5 bg-gradient-fade-navyblue d-flex align-content-center justify-content-between z-index-10">
                     <a class="text-light pb-2 pt-2 mt-2 ms-3 ms-lg-5 ms-xl-5 ms-xxl-5 mb-2 z-index-10" href="index.html">
@@ -26,7 +33,7 @@
                         </svg>
                     </a>
                     <a class="text-light pb-2 pt-2 mt-2 me-3 me-lg-5 me-xl-5 me-xxl-5 mb-2 z-index-10" 
-                    onclick="toggleCamera()">
+                        onclick="toggleCamera()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
                             <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
                             <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
@@ -61,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div id="camLoading" class="content-absolute-center">
+            <div id="camLoading" class="content-absolute-center d-none">
                 <div class="loading text-light-50 d-flex flex-column justify-content-center align-content-center">
                     <span class="d-flex justify-content-center">
                         <div class="spinner-border width-and-height-5rem weight-70" role="status">
@@ -73,11 +80,13 @@
                     </div>
                 </div>
             </div>
-            <video id="camera" class="video-background" autoplay></video>
+            <div class="camera-video">
+                <video id="video" width="512" height="512" autoplay></video>
+            </div>
         </div>
         
 
         <script src="./lib/bootstrap-5.0.2-dist/js/bootstrap.min.js" async defer></script>
-        <script src="./asset/script/scanner.js" async defer></script>
+        <script src="./asset/script/new-scanner.js" defer></script>
     </body>
 </html>
