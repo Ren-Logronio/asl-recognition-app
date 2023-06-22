@@ -9,11 +9,12 @@ const expressionButton = document.querySelector('#expression-button');
 const alphabetButton = document.querySelector('#alphabet-button');
 const cameraToggleButton = document.querySelector('#toggle-camera');
 const scannerFrame = document.querySelector('#scanner-frame');
+const predictionThreshold = 0.8;
 let predictionEnabled = false;
 let facing = "environment";
 let windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
 let android = "Android";
-let typeOfOS = navigator.userAgentData.platform;
+let typeOfOS = navigator.userAgentData.platform || navigator.platform;
 let handDetection_Model;
 let handAlphabet_Model;
 let handExpression_Model;
@@ -38,25 +39,36 @@ async function loadHandAlphabetModel(){
 }
 
 async function loadHandDetectionModel(){
-    return await handTrack.load();
+    let handDetectionModel;
+    const modelURL = "./model/detections/model.json";
+    const metadataURL = "./model/detections/metadata.json";
+    handDetectionModel = await tmImage.load(modelURL, metadataURL);
+    return handDetectionModel;
 }
 
 async function handDetect(){
-    let result;
-    await handDetection_Model.detect(webcam.canvas).then(prediction => {
-        if(prediction.length > 0){
-            debug_detection.innerHTML = "true";
-            result = true;
-        } else {
-            debug_detection.innerHTML = "false";
-            result = false;
+    let maxPrediction = predictionThreshold;
+    let maxClassname = "";
+    const prediction = await handDetection_Model.predict(webcam.canvas);
+    prediction.forEach((element) => {
+        if(element.probability > maxPrediction){
+            maxPrediction = element.probability;
+            maxClassname = element.className;
         }
     });
-    return result;
+    return maxClassname;
+}
+
+async function preprocessImage(image){
+    let tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([224, 224]).toFloat();
+    let offset = tf.scalar(127.5);
+    let output = tensor.sub(offset).div(offset).expandDims();
+    tf.dispose(tensor);
+    return output;
 }
 
 async function handPredict(){
-    let maxPrediction = 0;
+    let maxPrediction = predictionThreshold;
     let maxClassname = "";
     if(mode == "expression"){
         const prediction = await handExpression_Model.predict(webcam.canvas);
@@ -69,7 +81,7 @@ async function handPredict(){
     } else if (mode == "alphabet"){
         const prediction = await handAlphabet_Model.predict(webcam.canvas);
         prediction.forEach((element) => {
-            if(element.probability > maxPrediction){
+            if(element.probability > maxPrediction ){
                 maxPrediction = element.probability;
                 maxClassname = element.className;
             }
@@ -136,26 +148,9 @@ async function initialize(){
     webcamLoop();
     setInterval(() => {
         detectLoop();
-    }, 500);
-    setInterval(() => {
-        predictLoop();
-    }, 1000);
+    }, 100);
 
-    
     scannerFrame.classList.remove("d-none");
-    /*
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(function(stream) {
-                loading.remove();
-                video.srcObject = stream;
-                video.play();
-                setInterval(() => {
-                    detectAndPredictLoop();
-                }, 1000);
-            });
-    }
-    */
 }
 
 function toggleCamera() {
@@ -184,12 +179,13 @@ function changeModeToAlphabet() {
 
 function webcamLoop(){
     webcam.update();
+    predictLoop();
     requestAnimationFrame(webcamLoop);
 }
 
 async function detectLoop(){
-    handDetect().then(async (result) => {
-        if(result){
+    await handDetect().then((result) => {
+        if(result == "true"){
             predictionEnabled = true;
             scannerFrame.style.opacity = 0.75;
             scannerFrame.style.width = "215px";
