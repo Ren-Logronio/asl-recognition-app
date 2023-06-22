@@ -9,7 +9,7 @@ const expressionButton = document.querySelector('#expression-button');
 const alphabetButton = document.querySelector('#alphabet-button');
 const cameraToggleButton = document.querySelector('#toggle-camera');
 const scannerFrame = document.querySelector('#scanner-frame');
-const predictionThreshold = 0.8;
+const predictionThreshold = 0.75;
 let predictionEnabled = false;
 let facing = "environment";
 let windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
@@ -57,14 +57,6 @@ async function handDetect(){
         }
     });
     return maxClassname;
-}
-
-async function preprocessImage(image){
-    let tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([224, 224]).toFloat();
-    let offset = tf.scalar(127.5);
-    let output = tensor.sub(offset).div(offset).expandDims();
-    tf.dispose(tensor);
-    return output;
 }
 
 async function handPredict(){
@@ -148,7 +140,7 @@ async function initialize(){
     webcamLoop();
     setInterval(() => {
         detectLoop();
-    }, 100);
+    }, 1000);
 
     scannerFrame.classList.remove("d-none");
 }
@@ -213,5 +205,4 @@ async function predictLoop(){
     }
 }
 
-// on load
 document.onload = initialize();
