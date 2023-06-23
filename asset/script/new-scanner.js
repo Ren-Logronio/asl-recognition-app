@@ -21,6 +21,7 @@ let handExpression_Model;
 let constraints;
 let mode = "alphabet";
 let webcam;
+let flipped; // for android only
 
 async function loadHandExpressionModel(){
     let handExpressionModel;
@@ -89,6 +90,7 @@ function checkOrientation() {
     if (facingParam != null) {
         // facingParam can only either be user or environment
         if (facingParam == "user" || facingParam == "environment") {
+            flipped = (facingParam == "user");
             return facingParam;
         } else {
             return "environment";
@@ -121,7 +123,7 @@ async function initialize(){
     changeModeToAlphabet();
     // constraints = checkPlatform();
     if(isAndroid()){
-        webcam = new tmImage.Webcam(512, 512, false);
+        webcam = new tmImage.Webcam(348, 348, flipped);
         cameraToggleButton.classList.remove("d-none");
         await webcam.setup({ facingMode: facing });
     } else {
