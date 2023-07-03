@@ -35,7 +35,7 @@ for folder in os.listdir(target_path):
     print(f'Selecting folder {folder}')
     image_number = 1
     # add ! at the end of output path and create it
-    output_path = os.path.join(target_path, folder + '!')
+    output_path = os.path.join(target_path, f'{folder}!')
     # check if output_path exists
     if not os.path.exists(output_path):
         os.mkdir(output_path)
@@ -50,6 +50,7 @@ for folder in os.listdir(target_path):
         print(f'Processed image {image_number} in {output_path}')
         image_number += 1
         total_images += 1
+        
 '''
 for file in os.listdir(target_path):
     image = cv2.imread(os.path.join(target_path, file))

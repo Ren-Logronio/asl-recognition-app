@@ -9,6 +9,7 @@ const expressionButton = document.querySelector('#expression-button');
 const alphabetButton = document.querySelector('#alphabet-button');
 const cameraToggleButton = document.querySelector('#toggle-camera');
 const scannerFrame = document.querySelector('#scanner-frame');
+const test = document.querySelector('#test');
 const predictionThreshold = 0.9;
 let predictionEnabled = false;
 let facing = "environment";
@@ -138,11 +139,11 @@ async function initialize(){
     handDetection_Model = await loadHandDetectionModel();
     handExpression_Model = await loadHandExpressionModel();
     handAlphabet_Model = await loadHandAlphabetModel();
+
+    
     
     webcamLoop();
-    setInterval(() => {
-        detectLoop();
-    }, 1000);
+    // setInterval(() => { detectLoop(); }, 1000);
 
     scannerFrame.classList.remove("d-none");
 }
@@ -173,7 +174,7 @@ function changeModeToAlphabet() {
 
 function webcamLoop(){
     webcam.update();
-    predictLoop();
+    // predictLoop();
     requestAnimationFrame(webcamLoop);
 }
 
