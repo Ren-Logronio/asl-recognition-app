@@ -174,6 +174,8 @@ function changeModeToAlphabet() {
 
 function webcamLoop(){
     webcam.update();
+
+    
     // predictLoop();
     requestAnimationFrame(webcamLoop);
 }
